@@ -1,9 +1,9 @@
 import { Label } from 'components/ContactForm/ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { filterChange, getFilter } from 'redux/filterSlice';
+import { filterChange, selectFilter } from 'redux/filterSlice';
 
 export const Filter = () => {
-  const filter = useSelector(getFilter);
+  const filter = useSelector(selectFilter);
   const dispatch = useDispatch();
 
   const handleFilterChange = evt => {

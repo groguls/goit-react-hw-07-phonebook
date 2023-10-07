@@ -8,11 +8,19 @@ import {
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
-import { useSelector } from 'react-redux';
-import { getContacts } from 'redux/contactsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectContacts } from 'redux/contactsSlice';
+import { useEffect } from 'react';
+import { fetchContacts } from 'redux/operations';
+import { Toaster } from 'react-hot-toast';
 
 export const App = () => {
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
     <PageWrapper>
@@ -28,6 +36,7 @@ export const App = () => {
           </>
         )}
       </ContactListWraper>
+      <Toaster position="top-right" />
     </PageWrapper>
   );
 };

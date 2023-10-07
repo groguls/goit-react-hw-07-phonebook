@@ -2,17 +2,20 @@ import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { StyledForm, Label, Button, ErrorMsg } from './ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact, getContacts } from 'redux/contactsSlice';
+import { selectContacts, selectIsLoading } from 'redux/contactsSlice';
+import { addContact } from 'redux/operations';
+import { Spinner } from 'components/Spinner';
+import toast from 'react-hot-toast';
 
-const SignupSchema = Yup.object().shape({
+export const SignupSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Too Short!')
     .matches(
-      /^[a-zA-Zа-яА-ЯіІєЄїЇ]+(([' -][a-zA-Zа-яА-ЯіІєЄїЇ ])?[a-zA-Zа-яА-ЯіІєЄїЇ]*)*$/,
+      /^[a-zA-Zа-яА-ЯіІєЄїЇю.]+(([' -][a-zA-Zа-яА-ЯіІєЄїЇ .])?[a-zA-Zа-яА-ЯіІєЄїЇ.]*)*$/,
       "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
     )
     .required('Required'),
-  number: Yup.string()
+  phone: Yup.string()
     .matches(
       /\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}/,
       'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
@@ -21,7 +24,8 @@ const SignupSchema = Yup.object().shape({
 });
 
 export const ContactForm = () => {
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
+  const isLoad = useSelector(selectIsLoading);
   const dispatch = useDispatch();
 
   const onFormSubmit = contactData => {
@@ -30,16 +34,15 @@ export const ContactForm = () => {
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
     if (isNameInContacts) {
-      alert(`${name} is alredy in contacts`);
+      toast.error(`${name} is alredy in contacts`);
       return;
     }
-
     dispatch(addContact(contactData));
   };
 
   return (
     <Formik
-      initialValues={{ name: '', number: '' }}
+      initialValues={{ name: '', phone: '' }}
       validationSchema={SignupSchema}
       onSubmit={(values, actions) => {
         onFormSubmit(values);
@@ -54,11 +57,13 @@ export const ContactForm = () => {
         </Label>
         <Label>
           Phone number
-          <Field name="number" type="tel" placeholder="067 123 45 67" />
-          <ErrorMsg component="div" name="number" />
+          <Field name="phone" type="tel" placeholder="067 123 45 67" />
+          <ErrorMsg component="div" name="phone" />
         </Label>
 
-        <Button type="submit">Add contact</Button>
+        <Button type="submit" disabled={isLoad}>
+          Add contact {isLoad && <Spinner />}
+        </Button>
       </StyledForm>
     </Formik>
   );

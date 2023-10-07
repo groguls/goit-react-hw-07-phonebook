@@ -7,7 +7,7 @@ export const StyledForm = styled(Form)`
   align-items: flex-start;
   gap: 15px;
   width: 100%;
-  max-width: 500px;
+  max-width: 800px;
   padding: 25px 50px;
   border-radius: 5px;
   border: 2px #e1ecf4 solid;
@@ -22,6 +22,8 @@ export const Label = styled.label`
 `;
 
 export const Button = styled.button`
+  display: flex;
+  gap: 4px;
   background-color: #e1ecf4;
   border-radius: 3px;
   border: 1px solid #7aa7c7;
@@ -35,6 +37,10 @@ export const Button = styled.button`
     color: #2c5777;
     box-shadow: 0 0 3px 3px rgba(0, 149, 255, 0.15);
   }
+`;
+
+export const ButtonsWrap = styled.div`
+  display: flex;
 `;
 
 export const ErrorMsg = styled(ErrorMessage)`

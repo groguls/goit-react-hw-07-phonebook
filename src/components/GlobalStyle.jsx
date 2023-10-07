@@ -42,6 +42,9 @@ ul {
 `;
 
 export const PageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: #fcfcfc;
   padding: 50px;
   height: 100vh;
@@ -53,7 +56,7 @@ export const ContactListWraper = styled.div`
   align-items: stretch;
   gap: 15px;
   width: 100%;
-  max-width: 500px;
+  max-width: 800px;
   padding: 25px 50px;
   border-radius: 5px;
   border: 2px #e1ecf4 solid;
