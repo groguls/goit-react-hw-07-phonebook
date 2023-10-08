@@ -2,10 +2,11 @@ import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { StyledForm, Label, Button, ErrorMsg } from './ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectContacts, selectIsLoading } from 'redux/contactsSlice';
+import { selectContacts } from 'redux/contactsSlice';
 import { addContact } from 'redux/operations';
 import { Spinner } from 'components/Spinner';
 import toast from 'react-hot-toast';
+import { useState } from 'react';
 
 export const SignupSchema = Yup.object().shape({
   name: Yup.string()
@@ -24,8 +25,8 @@ export const SignupSchema = Yup.object().shape({
 });
 
 export const ContactForm = () => {
+  const [isLoad, setIsLoad] = useState(false);
   const contacts = useSelector(selectContacts);
-  const isLoad = useSelector(selectIsLoading);
   const dispatch = useDispatch();
 
   const onFormSubmit = contactData => {
@@ -37,7 +38,10 @@ export const ContactForm = () => {
       toast.error(`${name} is alredy in contacts`);
       return;
     }
-    dispatch(addContact(contactData));
+    setIsLoad(true);
+    dispatch(addContact(contactData)).finally(() => {
+      setIsLoad(false);
+    });
   };
 
   return (

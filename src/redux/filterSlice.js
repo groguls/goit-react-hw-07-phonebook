@@ -1,4 +1,4 @@
-import { createSelector, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const filterSlice = createSlice({
   name: 'filter',
@@ -13,6 +13,3 @@ const filterSlice = createSlice({
 export const { filterChange } = filterSlice.actions;
 export const filterReducer = filterSlice.reducer;
 export const selectFilter = state => state.filter;
-export const selectNormalizedFilter = createSelector([selectFilter], filter =>
-  filter.toLowerCase()
-);

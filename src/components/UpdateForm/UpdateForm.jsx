@@ -1,17 +1,18 @@
 import { Formik, Field } from 'formik';
 import { StyledForm, ErrorMsg, InputWrap } from './UpdateForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectContacts, selectIsLoading } from 'redux/contactsSlice';
+import { selectContacts } from 'redux/contactsSlice';
 import { editContact } from 'redux/operations';
 import { Spinner } from 'components/Spinner';
 import { ContactButton } from 'components/Contact/Contact.styled';
 import { ButtonsWrap } from 'components/ContactForm/ContactForm.styled';
 import toast from 'react-hot-toast';
 import { SignupSchema } from 'components/ContactForm/ContactForm';
+import { useState } from 'react';
 
 export const UpdateForm = ({ id, name, phone, handleEdit }) => {
+  const [isLoad, setIsLoad] = useState(false);
   const contacts = useSelector(selectContacts);
-  const isLoad = useSelector(selectIsLoading);
   const dispatch = useDispatch();
 
   const onFormSubmit = values => {
@@ -23,8 +24,11 @@ export const UpdateForm = ({ id, name, phone, handleEdit }) => {
       toast.error(`${name} is alredy in contacts`);
       return;
     }
-    dispatch(editContact({ id, values }));
-    handleEdit(false);
+    setIsLoad(true);
+    dispatch(editContact({ id, values })).finally(() => {
+      setIsLoad(false);
+      handleEdit(false);
+    });
   };
 
   return (
